@@ -28,7 +28,7 @@ def add_material():
 
         print("Material Cost: Rs.", amount)
 
-    print("\n========== MATERIAL ESTIMATE ==========")
+    print("\n MATERIAL ESTIMATE ")
 
     for item in materials:
         print(
@@ -70,7 +70,7 @@ def view_log():
         with open(FILE_NAME, "r") as file:
             reader = csv.reader(file)
 
-            print("\n========== MATERIAL LOG ==========")
+            print("\n MATERIAL LOG ")
 
             for row in reader:
                 print(" | ".join(row))
@@ -81,7 +81,7 @@ def view_log():
 
 def main():
     while True:
-        print("\n===== MATERIAL ESTIMATE SYSTEM =====")
+        print("\nMATERIAL ESTIMATE SYSTEM ")
         print("1. Generate Material Estimate")
         print("2. View Material Log")
         print("3. Exit")
