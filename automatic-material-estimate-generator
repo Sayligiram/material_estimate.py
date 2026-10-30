@@ -1,0 +1,159 @@
+import csv
+from datetime import datetime
+import os
+
+FILE_NAME = "material_log.csv"
+
+
+def add_material():
+    materials = []
+    total = 0
+
+    n = int(input("Enter number of materials: "))
+
+    for i in range(n):
+        print("\nMaterial", i + 1)
+
+        name = input("Enter material name: ")
+        quantity = float(input("Enter quantity: "))
+        rate = float(input("Enter rate per unit: "))
+
+        amount = quantity * rate
+        total += amount
+
+        materials.append([
+            name, quantity, rate, amount
+        ])
+
+        print("Material Cost: Rs.", amount)
+
+    print("\n========== MATERIAL ESTIMATE ==========")
+
+    for item in materials:
+        print(
+            item[0], "| Quantity:", item[1],
+            "| Rate:", item[2],
+            "| Amount: Rs.", item[3]
+        )
+
+    print("---------------------------------------")
+    print("Grand Total: Rs.", total)
+
+    save_log(materials, total)
+
+
+def save_log(materials, total):
+    file_exists = os.path.exists(FILE_NAME)
+    date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+    with open(FILE_NAME, "a", newline="") as file:
+        writer = csv.writer(file)
+
+        if not file_exists:
+            writer.writerow([
+                "Date", "Material", "Quantity",
+                "Rate", "Amount", "Grand Total"
+            ])
+
+        for item in materials:
+            writer.writerow([
+                date, item[0], item[1],
+                item[2], item[3], total
+            ])
+
+    print("\nEstimate and log saved successfully!")
+
+
+def view_log():
+    try:
+        with open(FILE_NAME, "r") as file:
+            reader = csv.reader(file)
+
+            print("\n========== MATERIAL LOG ==========")
+
+            for row in reader:
+                print(" | ".join(row))
+
+    except FileNotFoundError:
+        print("No log found. Generate an estimate first.")
+
+
+def main():
+    while True:
+        print("\n===== MATERIAL ESTIMATE SYSTEM =====")
+        print("1. Generate Material Estimate")
+        print("2. View Material Log")
+        print("3. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            try:
+                add_material()
+            except ValueError:
+                print("Please enter valid numeric values.")
+
+        elif choice == "2":
+            view_log()
+
+        elif choice == "3":
+            print("Thank you for using the system!")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+
+main()
+
+
+OUTPUT:
+
+===== MATERIAL ESTIMATE SYSTEM =====
+1. Generate Material Estimate
+2. View Material Log
+3. Exit
+
+Enter your choice: 1
+
+Enter number of materials: 3
+
+Material 1
+Enter material name: Cement
+Enter quantity: 10
+Enter rate per unit: 400
+Material Cost: Rs. 4000.0
+
+Material 2
+Enter material name: Sand
+Enter quantity: 5
+Enter rate per unit: 1200
+Material Cost: Rs. 6000.0
+
+Material 3
+Enter material name: Bricks
+Enter quantity: 500
+Enter rate per unit: 8
+Material Cost: Rs. 4000.0
+
+========== MATERIAL ESTIMATE ==========
+Cement | Quantity: 10.0 | Rate: 400.0 | Amount: Rs. 4000.0
+Sand | Quantity: 5.0 | Rate: 1200.0 | Amount: Rs. 6000.0
+Bricks | Quantity: 500.0 | Rate: 8.0 | Amount: Rs. 4000.0
+---------------------------------------
+Grand Total: Rs. 14000.0
+
+Estimate and log saved successfully!
+
+===== MATERIAL ESTIMATE SYSTEM =====
+1. Generate Material Estimate
+2. View Material Log
+3. Exit
+
+Enter your choice: 2
+
+========== MATERIAL LOG ==========
+Date | Material | Quantity | Rate | Amount | Grand Total
+31-10-2026 10:30:00 | Cement | 10.0 | 400.0 | 4000.0 | 14000.0
+31-10-2026 10:30:00 | Sand | 5.0 | 1200.0 | 6000.0 | 14000.0
+31-10-2026 10:30:00 | Bricks | 500.0 | 8.0 | 4000.0 | 14000.0
